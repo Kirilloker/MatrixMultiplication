@@ -1,0 +1,106 @@
+﻿@page
+@model MatrixMultiplication.Pages.MatrixModel
+@{
+    Layout = "_Layout"; // Если у вас есть общий лейаут
+    ViewData["Title"] = "Произведение матриц";
+}
+
+<div class="card shadow p-3 mt-3">
+    <h2 class="card-title">Произведение матриц</h2>
+    <hr class="mb-3" />
+    <div class="card-body">
+        <form method="post" class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label">Строк в A</label>
+                <input type="number" name="RowsA" class="form-control" value="2" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Столбцов в A</label>
+                <input type="number" name="ColsA" class="form-control" value="2" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Строк в B</label>
+                <input type="number" name="RowsB" class="form-control" value="2" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Столбцов в B</label>
+                <input type="number" name="ColsB" class="form-control" value="2" />
+            </div>
+
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-primary">Сгенерировать и умножить</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (Model.MatrixViewModel != null && Model.MatrixViewModel.ResultClassic != null)
+{
+    <div class="row mt-4">
+        <!-- Классическое умножение -->
+        <div class="col-md-6">
+            <div class="card shadow p-2">
+                <h3 class="card-title text-center">Классическое умножение</h3>
+                <div class="card-body">
+                    <p>Время: <strong>@Model.MatrixViewModel.TimeClassic</strong> мс</p>
+                    <div class="table-responsive">
+                        <table class="table table-bordered text-center">
+                            @* Показываем максимум 10 строк *@
+                            @for (int i = 0; i < Model.MatrixViewModel.ResultClassic.Length && i < 10; i++)
+                            {
+                                <tr>
+                                    @* Показываем максимум 10 столбцов *@
+                                    @for (int j = 0; j < Model.MatrixViewModel.ResultClassic[i].Length && j < 10; j++)
+                                    {
+                                        <td>@Model.MatrixViewModel.ResultClassic[i][j]</td>
+                                    }
+                                    @* Если столбцов было больше 10 — ставим многоточие *@
+                                    @if (Model.MatrixViewModel.ResultClassic[i].Length > 10)
+                                    {
+                                    <td>...</td>
+                                    }
+                                </tr>
+                            }
+                            @* Если строк больше 10 — добавим многоточие в отдельной строке *@
+                            @if (Model.MatrixViewModel.ResultClassic.Length > 10)
+                            {
+                            <tr><td colspan="11">...</td></tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Блочное умножение -->
+        <div class="col-md-6">
+            <div class="card shadow p-2">
+                <h3 class="card-title text-center">Блочное умножение</h3>
+                <div class="card-body">
+                    <p>Время: <strong>@Model.MatrixViewModel.TimeBlock</strong> мс</p>
+                    <div class="table-responsive">
+                        <table class="table table-bordered text-center">
+                            @for (int i = 0; i < Model.MatrixViewModel.ResultBlock.Length && i < 10; i++)
+                            {
+                                <tr>
+                                    @for (int j = 0; j < Model.MatrixViewModel.ResultBlock[i].Length && j < 10; j++)
+                                    {
+                                        <td>@Model.MatrixViewModel.ResultBlock[i][j]</td>
+                                    }
+                                    @if (Model.MatrixViewModel.ResultBlock[i].Length > 10)
+                                    {
+                                    <td>...</td>
+                                    }
+                                </tr>
+                            }
+                            @if (Model.MatrixViewModel.ResultBlock.Length > 10)
+                            {
+                            <tr><td colspan="11">...</td></tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
